@@ -5,7 +5,7 @@ export const hadnleInputErrors = (req, res, next) => {
 
     if (!errors.isEmpty()){
         res.status(400)
-        res.json({errors: errors.array(), message: 'safaf input error'})
+        res.json({errors: errors.array()})
     } else {
         next()
     }
