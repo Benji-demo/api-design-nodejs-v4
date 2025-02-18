@@ -1,6 +1,8 @@
 import {Router} from 'express'
 import {body, oneOf, validationResult} from 'express-validator'
 import { hadnleInputErrors } from './modules/middleware'
+import { createProduct, deleteProduct, getOneproduct, getProducts, updateProduct } from './handlers/product'
+import { createUpdate, deleteUpdate, getOneUpdate, getUpdates, updateUpdate } from './handlers/update'
 
 const router = Router()
 
@@ -9,37 +11,34 @@ const router = Router()
 product
 */
 
-router.get('/product', (req, res) => {
-    res.json({message: "hello"})
-})
-router.get('/product/:id', () => {})
-
-
-router.put('/product/:id' ,body('name').isString() ,hadnleInputErrors, (req, res) => {})
-router.post('/product' ,body('name').isString() ,hadnleInputErrors, () => {})
-router.delete('/product', () => {})
+router.get('/product', getProducts)
+router.get('/product/:id', getOneproduct)
+router.put('/product/:id' ,body('name').isString() ,hadnleInputErrors, updateProduct)
+router.post('/product' ,body('name').isString() ,hadnleInputErrors, createProduct)
+router.delete('/product/:id',deleteProduct)
 
 
 /*
 update
 */
-router.get('/update', () => {})
-router.get('/update/:id', () => {})
+router.get('/update', getUpdates)
+router.get('/update/:id', getOneUpdate)
 router.put('/update/:id',
     body('title').optional(),
     body('body').optional(),
-    body('status').isIn(['IN_PROGRESS','SHIPPED', 'DEPRECIATED' ]),
+    body('status').isIn(['IN_PROGRESS','SHIPPED', 'DEPRECIATED']).optional(),
     body('version').optional(),
-    hadnleInputErrors , (req, res) => {
-})
+    hadnleInputErrors , 
+    updateUpdate)
 
 router.post('/update',
     body('title').exists().isString(),
     body('body').exists().isString(),
+    body("productId").exists().isString(),
     hadnleInputErrors,
-    (req,res) => {})
+    createUpdate)
 
-router.delete('/update', () => {})
+router.delete('/update/:id',deleteUpdate)
 
 
 /*
@@ -64,6 +63,6 @@ router.post('/updatepoint',
     (req, res) => {})
 
 
-router.delete('/updatepoint', () => {})
+router.delete('/updatepoint/:id', () => {})
 
 export default router
