@@ -1,4 +1,5 @@
 import prisma from "../db"
+import express from 'express';
 
 //GET all
 export const getProducts = async (req, res) => {
@@ -30,15 +31,22 @@ export const getOneproduct = async (req, res) => {
 
 
 //POST product( create product)
-export const createProduct = async (req, res) =>{
-    const product = await prisma.product.create({
-        data: {
-            name: req.body.name,
-            belongsToId: req.user.id
-        }
-    })
+export const createProduct = async (req, res, next) =>{
+    try{
+        const product = await prisma.product.create({
+            data: {
+                name: req.body.name,
+                belongsToId: req.user.id
+            }
+        })
+    
+        res.json({data: product})
+        
+    } catch (e){
+        next(e)
+    }
 
-    res.json({data: product})
+    
 }
 
 //Put produt

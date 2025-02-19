@@ -61,8 +61,20 @@ router.post('/updatepoint',
     body('updateId').exists().isString(),
     hadnleInputErrors,
     (req, res) => {})
-
-
 router.delete('/updatepoint/:id', () => {})
+
+
+
+
+
+router.use((err, req, res, next) => {
+    if (err.type === "auth") {
+        res.status(401).json({message: "unauthorized"})
+    } else if (err.type === "input") {
+        res.status(400).json({message: "incalid input"})
+    } else {
+        res.status(500).json({message: "oops, thats on us server problem"})
+    }
+})
 
 export default router
